@@ -1,28 +1,58 @@
 package org.yearup.data.mysql;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
 {
-    public MySqlCategoryDao(DataSource dataSource)
+    private final BasicDataSource basicDataSource;
+
+    public MySqlCategoryDao(DataSource dataSource, BasicDataSource basicDataSource)
     {
         super(dataSource);
+        this.basicDataSource = basicDataSource;
     }
 
     @Override
     public List<Category> getAllCategories()
     {
+        List<Category> categories = new ArrayList<>();
         // get all categories
-        return null;
-    }
+        String sql = "SELECT * FROM videogamestore.categories;";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Category category = new Category(
+                        resultSet.getInt("category_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("description")
+                );
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching categories " +
+                    e.getMessage());
+        }
+        return categories;
+    };
+
+
+
 
     @Override
     public Category getById(int categoryId)
