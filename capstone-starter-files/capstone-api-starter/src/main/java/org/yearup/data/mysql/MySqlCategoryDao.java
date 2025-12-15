@@ -58,6 +58,26 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     public Category getById(int categoryId)
     {
         // get category by id
+        String sql = "SELECT category_id, name, description FROM categories WHERE category_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, categoryId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Category(
+                            resultSet.getInt("category_id"),
+                            resultSet.getString("name"),
+                            resultSet.getString("description")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching category by id", e);
+        }
         return null;
     }
 
@@ -65,6 +85,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     public Category create(Category category)
     {
         // create a new category
+
         return null;
     }
 
