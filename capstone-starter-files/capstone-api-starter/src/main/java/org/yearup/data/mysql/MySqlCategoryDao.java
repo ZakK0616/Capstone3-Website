@@ -85,20 +85,61 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     public Category create(Category category)
     {
         // create a new category
+        String sql = """
+            INSERT INTO videogamestore.categories (name, description)
+            VALUES (?, ?);""";
 
-        return null;
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.setString(2, category.getDescription());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+
+            }
+        } catch (SQLException e) {
+            System.out.println("Error trying to create new category " +
+                    e.getMessage());
+        }
+        return category;
     }
 
     @Override
     public void update(int categoryId, Category category)
     {
         // update category
+        String sql = "UPDATE categories SET name = ?, description = ? WHERE category_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.setString(2, category.getDescription());
+            preparedStatement.setInt(3, categoryId);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating category", e);
+        }
     }
 
     @Override
     public void delete(int categoryId)
     {
         // delete category
+        String sql = "DELETE FROM categories WHERE category_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting category", e);
+        }
     }
 
     private Category mapRow(ResultSet row) throws SQLException
