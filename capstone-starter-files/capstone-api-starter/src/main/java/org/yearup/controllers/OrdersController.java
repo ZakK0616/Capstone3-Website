@@ -6,8 +6,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.yearup.data.OrderDao;
 import org.yearup.data.ShoppingCartDao;
 import org.yearup.data.UserDao;
+import org.yearup.models.ShoppingCart;
+import org.yearup.models.ShoppingCartItem;
+import org.yearup.models.User;
 
 import java.security.Principal;
 
@@ -32,8 +36,19 @@ public class OrdersController
     }
 
     @PostMapping
-    public void checkour (Principal principal)
+    public void checkout (Principal principal)
     {
+        String username = principal.getName();
+        User user = userDao.getByUserName(username);
+        int userId = user.getId();
 
+        ShoppingCart cart = shoppingCartDao.getByUserId(userId);
+        int orderId = orderDao.createOrder(userId, cart.getTotal());
+
+        for (ShoppingCartItem item : cart.getItems().values())
+        {
+            orderDao.addLineItem(orderId, item.getProductId(), item.getQuantity(), item.getProduct().getPrice());
+            shoppingCartDao.clearCart(userId);
+        }
     }
 }
