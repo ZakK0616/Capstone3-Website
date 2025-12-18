@@ -45,25 +45,4 @@ catch (SQLException e)
 }
     }
 
-    @Override
-    public void addLineItem(int orderId, int productId, int quantity, BigDecimal price) {
-        String sql = """
-                INSERT INTO order_line_items (order_id, product_id, price)
-                VALUES (?, ?, ?)
-                """;
-        try (Connection connection = getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql))
-        {
-            statement.setInt(1, orderId);
-            statement.setInt(2, productId);
-            statement.setBigDecimal(3, price);
-            statement.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException("Error creating order line item", e);
-
-        }
-
-    }
 }

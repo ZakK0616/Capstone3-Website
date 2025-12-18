@@ -56,7 +56,7 @@ public class OrdersController
         {
             orderLineItemDao.addLineItem(orderId, item.getProductId(), item.getQuantity(), item.getProduct().getPrice());
             shoppingCartDao.clearCart(userId);
-            return new Order(orderId, userId, cart.getTotal());
+            return new Order (orderId, userId, cart.getTotal());
         }
         catch (Exception e)
         {
