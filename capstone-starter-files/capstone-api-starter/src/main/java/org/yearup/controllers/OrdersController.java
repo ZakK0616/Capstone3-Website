@@ -1,12 +1,16 @@
 package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.OrderDao;
+import org.yearup.data.OrderLineItemDao;
 import org.yearup.data.ShoppingCartDao;
 import org.yearup.data.UserDao;
 import org.yearup.models.ShoppingCart;
@@ -24,19 +28,22 @@ public class OrdersController
     private ShoppingCartDao shoppingCartDao;
     private OrderDao orderDao;
     private UserDao userDao;
+    private OrderLineItemDao orderLineItemDao;
 
     @Autowired
     public OrdersController (ShoppingCartDao shoppingCartDao,
+                             OrderLineItemDao orderLineItemDao,
                              OrderDao orderDao,
                              UserDao userDao)
     {
         this.shoppingCartDao = shoppingCartDao;
         this.orderDao = orderDao;
         this.userDao = userDao;
+        this.orderLineItemDao = orderLineItemDao;
     }
 
     @PostMapping
-    public void checkout (Principal principal)
+    public Order checkout (Principal principal)
     {
         String username = principal.getName();
         User user = userDao.getByUserName(username);
@@ -47,8 +54,14 @@ public class OrdersController
 
         for (ShoppingCartItem item : cart.getItems().values())
         {
-            orderDao.addLineItem(orderId, item.getProductId(), item.getQuantity(), item.getProduct().getPrice());
+            orderLineItemDao.addLineItem(orderId, item.getProductId(), item.getQuantity(), item.getProduct().getPrice());
             shoppingCartDao.clearCart(userId);
+            return new Order(orderId, userId, cart.getTotal());
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Checkout failed.");
         }
     }
+
 }
