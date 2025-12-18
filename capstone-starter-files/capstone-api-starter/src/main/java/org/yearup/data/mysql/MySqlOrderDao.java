@@ -23,8 +23,8 @@ public class MySqlOrderDao extends MySqlDaoBase implements OrderDao
     @Override
     public int createOrder(int userId, BigDecimal total) {
        String sql = """
-               INSERT INTO orders (user_id, order_date, total)
-               VALUES (? NOW()< ?)
+               INSERT INTO orders (user_id, address, city, state, zip, date, amount)
+               VALUES (?, ?, ?, ?, ?,NOW(), ?)
                """;
        try (Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS))
@@ -49,15 +49,15 @@ catch (SQLException e)
     @Override
     public void addLineItem(int orderId, int productId, int quantity, BigDecimal price) {
         String sql = """
-                INSERT INTO order_line_items (order_id, product_id, quantity, price)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO order_line_items (order_id, product_id, price)
+                VALUES (?, ?, ?)
                 """;
         try (Connection connection = getConnection();
         PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setInt(1, orderId);
             statement.setInt(2, productId);
-            statement.setBigDecimal(4, price);
+            statement.setBigDecimal(3, price);
             statement.executeUpdate();
         }
         catch (SQLException e)
