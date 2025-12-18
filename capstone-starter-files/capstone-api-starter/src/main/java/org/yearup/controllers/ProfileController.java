@@ -52,9 +52,10 @@ public class ProfileController {
             String username = principal.getName();
             User user = userDao.getByUserName(username);
             int userId = user.getId();
-            return profileDao.updateByUserId(userId, profile);;
+             profileDao.update(userId, profile);;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
+    return profile;
 }
 }
