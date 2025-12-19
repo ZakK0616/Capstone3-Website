@@ -115,4 +115,20 @@ No check if product exists before updating
 Missing validation → updating with null fields
 
 
+My Interesting code 📸
+==============================================================================================================================================================================================================================================================================
+
+
+<img width="1920" height="1080" alt="Desktop Screenshot 2025 12 19 - 09 49 14 76" src="https://github.com/user-attachments/assets/4d1f4020-dd5e-4a64-b7da-91cd6ec9c7a1" />
+
+
+Website Screenshots 📸
+==============================================================================================================================================================================================================================================================================
+
+
+<img width="1920" height="1080" alt="Desktop Screenshot 2025 12 19 - 09 43 16 56" src="https://github.com/user-attachments/assets/2c2a860c-be0a-44c3-bb94-d7b683830e6d" />
+<img width="1920" height="1080" alt="Desktop Screenshot 2025 12 19 - 09 45 29 10" src="https://github.com/user-attachments/assets/7f93b08b-e933-44b1-b325-6c6cbd4b6d0a" />
+<img width="1920" height="1080" alt="Desktop Screenshot 2025 12 19 - 09 43 34 15" src="https://github.com/user-attachments/assets/e7fabc35-43c9-4112-ac3a-9b6b831518fd" />
+<img width="1920" height="1080" alt="Desktop Screenshot 2025 12 19 - 09 43 40 56" src="https://github.com/user-attachments/assets/d907832f-784c-431d-b621-251c764ab5ad" />
+
 
