@@ -86,10 +86,33 @@ price >= maxPrice
 which is the opposite of what you want.
 
 Correct Logic
+===============================================================================================================================================================================================================================================================================
 
 It should be:
 
 price >= minPrice
 
 price <= maxPrice
+
+🐞 BUG #2 — Product update endpoint
+==============================================================================================================================================================================================================================================================================
+<img width="1920" height="1080" alt="Desktop Screenshot 2025 12 15 - 20 44 46 85" src="https://github.com/user-attachments/assets/df05147d-612e-4bc4-9bf7-6d01f4fc8c9a" />
+
+The Problem
+==============================================================================================================================================================================================================================================================================
+
+The controller calls productDao.update(id, product),
+but in the earlier code I saw that the DAO method signature is wrong or missing.
+
+Typical mistakes in this bug:
+
+The DAO update method is not implemented right
+
+DAO update signature doesn’t match controller
+
+No check if product exists before updating
+
+Missing validation → updating with null fields
+
+
 
